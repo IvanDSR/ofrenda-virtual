@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ofrenda de tres pisos</title>
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+<canvas id="myCanvas"></canvas>
+
+<!-- Librerías (Solo mapeo JSON limpio) -->
+<script type="importmap">
+{
+    "imports": {
+        "three": "./js/three.module.js",
+        "three/OrbitControls": "./js/OrbitControls.js"
+    }
+}
+</script>
+
+<script type="module">
+
+// LIBRERÍAS Y COMPONENTES
+import * as THREE from 'three';
+import { OrbitControls } from 'three/OrbitControls';
+import vasoAguaGroup from "./props/vaso_agua.js";
+import botellaGroup from "./props/botella.js";
+import papelGroup from "./props/papel_picado.js";
+import vasoGroup from "./props/vela.js";
+import flores from "./props/flor.js";
+
+
+// RENDERER
+var renderer = new THREE.WebGLRenderer({
+    canvas: document.getElementById('myCanvas'),
+    antialias: true
+});
+
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x70707C);
+
+
+// ESCENA
+var scene = new THREE.Scene();
+scene.background = new THREE.Color(0x70707C);
+
+
+// CÁMARA
+var camera = new THREE.PerspectiveCamera(
+    45,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+);
+
+camera.position.set(0, 28, 100);
+camera.lookAt(0, 14, 0);
+scene.add(camera);
+
+
+// CONTROLES
+var controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+controls.target.set(0, 14, 0);
+controls.update();
+
+
+// LUZ
+var luz = new THREE.AmbientLight(0xffffff, 1);
+scene.add(luz);
+
+
+// MATERIAL BLANCO
+var materialOfrenda = new THREE.MeshBasicMaterial({
+    color: 0xFFFFFF
+});
+
+
+// BASE DE OFRENDA DE TRES PISOS
+
+// PISO INFERIOR
+var geometriaPiso1 = new THREE.BoxGeometry(50, 8, 26);
+var piso1 = new THREE.Mesh(geometriaPiso1, materialOfrenda);
+piso1.position.set(0, 4, 0);
+scene.add(piso1);
+
+// PISO INTERMEDIO
+var geometriaPiso2 = new THREE.BoxGeometry(40, 8, 22);
+var piso2 = new THREE.Mesh(geometriaPiso2, materialOfrenda);
+piso2.position.set(0, 12, 0);
+scene.add(piso2);
+
+// PISO SUPERIOR
+var geometriaPiso3 = new THREE.BoxGeometry(30, 8, 18);
+var piso3 = new THREE.Mesh(geometriaPiso3, materialOfrenda);
+piso3.position.set(0, 20, 0);
+scene.add(piso3);
+
+
+//props
+// VASO DE AGUA
+const VASO_AGUA = vasoAguaGroup(20, 10, 7);
+VASO_AGUA.scale.set(0.2, 0.2, 0.2);
+scene.add(VASO_AGUA);
+
+// BOTELLA
+const BOTELLA = botellaGroup(-19, 10, 7);
+BOTELLA.scale.set(0.2, 0.3, 0.2);
+scene.add(BOTELLA);
+
+// PAPEL PICADO
+const PAPEL = papelGroup(0, 16.2, 11.2);
+PAPEL.scale.set(0.5, 0.5, 0.5);
+scene.add(PAPEL);
+
+// VELA
+const VELA = vasoGroup(-13, 18, 3);
+VELA.scale.set(0.5, 0.5, 0.5);
+scene.add(VELA);
+
+// TIRA DE FLORES
+const FLOR = flores(-13, 18, 3);
+FLOR.scale.set(0.5, 0.5, 0.5);
+scene.add(FLOR);
+
+// RENDERIZADO
+function render() {
+    controls.update();
+    renderer.render(scene, camera);
+    requestAnimationFrame(render);
+}
+
+render();
+
+
+// AJUSTAR TAMAÑO DE VENTANA
+window.addEventListener('resize', function() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+});
+
+</script>
+
+</body>
+</html>
