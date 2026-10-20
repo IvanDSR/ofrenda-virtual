@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -21,7 +22,7 @@
 
 <canvas id="myCanvas"></canvas>
 
-<!-- Librerías (Solo mapeo JSON limpio) -->
+<!-- LIBRERÍAS DE THREE.JS -->
 <script type="importmap">
 {
     "imports": {
@@ -33,9 +34,13 @@
 
 <script type="module">
 
-// LIBRERÍAS Y COMPONENTES
+// ==========================================
+// 1. IMPORTAR LIBRERÍAS Y OBJETOS
+// ==========================================
+
 import * as THREE from 'three';
 import { OrbitControls } from 'three/OrbitControls';
+
 import vasoAguaGroup from "./props/vaso_agua.js";
 import botellaGroup from "./props/botella.js";
 import papelGroup from "./props/papel_picado.js";
@@ -43,7 +48,10 @@ import vasoGroup from "./props/vela.js";
 import flores from "./props/flor.js";
 
 
-// RENDERER
+// ==========================================
+// 2. CONFIGURACIÓN DEL RENDERIZADO
+// ==========================================
+
 var renderer = new THREE.WebGLRenderer({
     canvas: document.getElementById('myCanvas'),
     antialias: true
@@ -54,12 +62,18 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0x70707C);
 
 
-// ESCENA
+// ==========================================
+// 3. CREAR ESCENA
+// ==========================================
+
 var scene = new THREE.Scene();
 scene.background = new THREE.Color(0x70707C);
 
 
-// CÁMARA
+// ==========================================
+// 4. CÁMARA
+// ==========================================
+
 var camera = new THREE.PerspectiveCamera(
     45,
     window.innerWidth / window.innerHeight,
@@ -67,93 +81,250 @@ var camera = new THREE.PerspectiveCamera(
     1000
 );
 
+// POSICIÓN DE LA CÁMARA
+// X = izquierda/derecha
+// Y = altura de la cámara
+// Z = distancia hacia delante/atrás
+
 camera.position.set(0, 28, 100);
+
+// PUNTO AL QUE MIRA LA CÁMARA
+// Cambia estos valores si quieres centrar otra zona.
+
 camera.lookAt(0, 14, 0);
 scene.add(camera);
 
 
-// CONTROLES
+// ==========================================
+// 5. CONTROLES DE LA CÁMARA
+// ==========================================
+
 var controls = new OrbitControls(camera, renderer.domElement);
+
 controls.enableDamping = true;
 controls.dampingFactor = 0.05;
+
+// Centro de rotación de la cámara
 controls.target.set(0, 14, 0);
 controls.update();
 
 
-// LUZ
+// ==========================================
+// 6. ILUMINACIÓN
+// ==========================================
+
 var luz = new THREE.AmbientLight(0xffffff, 1);
 scene.add(luz);
 
 
-// MATERIAL BLANCO
+// ==========================================
+// 7. MATERIAL DE LOS PISOS
+// ==========================================
+
 var materialOfrenda = new THREE.MeshBasicMaterial({
     color: 0xFFFFFF
 });
 
 
-// BASE DE OFRENDA DE TRES PISOS
+// ==========================================
+// 8. CONSTRUCCIÓN DE LOS TRES PISOS
+// ==========================================
 
 // PISO INFERIOR
+// Tamaño: ancho 50, alto 8, profundidad 26
+// Posición Y = 4
+// El piso ocupa aproximadamente desde Y = 0 hasta Y = 8.
+
 var geometriaPiso1 = new THREE.BoxGeometry(50, 8, 26);
 var piso1 = new THREE.Mesh(geometriaPiso1, materialOfrenda);
+
 piso1.position.set(0, 4, 0);
-scene.add(piso1);
+//scene.add(piso1);
+
 
 // PISO INTERMEDIO
+// Tamaño: ancho 40, alto 8, profundidad 22
+// Posición Y = 12
+// El piso ocupa desde Y = 8 hasta Y = 16.
+
 var geometriaPiso2 = new THREE.BoxGeometry(40, 8, 22);
 var piso2 = new THREE.Mesh(geometriaPiso2, materialOfrenda);
-piso2.position.set(0, 12, 0);
-scene.add(piso2);
+
+piso2.position.set(0, 12, -2);
+//scene.add(piso2);
+
 
 // PISO SUPERIOR
+// Tamaño: ancho 30, alto 8, profundidad 18
+// Posición Y = 20
+// El piso ocupa desde Y = 16 hasta Y = 24.
+
 var geometriaPiso3 = new THREE.BoxGeometry(30, 8, 18);
 var piso3 = new THREE.Mesh(geometriaPiso3, materialOfrenda);
-piso3.position.set(0, 20, 0);
+
+piso3.position.set(0, 20, -3);
 scene.add(piso3);
 
 
-//props
+// ==========================================
+// 9. COLOCAR LOS OBJETOS DE LA OFRENDA
+// ==========================================
+
+// IMPORTANTE:
+// Cada objeto tiene tres coordenadas: X, Y, Z.
+// X: izquierda (-) y derecha (+).
+// Y: abajo (-) y arriba (+).
+// Z: atrás (-) y frente (+).
+//
+// Para mover un objeto, cambia los tres números
+// dentro de .position o dentro de la función.
+// Para cambiar su tamaño, modifica .scale.
+//
+// Estos objetos se agregan a la escena por separado.
+
+
+// ------------------------------------------
 // VASO DE AGUA
+// ------------------------------------------
+
+// Posición inicial: (20, 10, 7)
+// Está pensado para el piso intermedio.
+// X = 20 lo acerca al extremo derecho.
+// Y = 10 lo coloca cerca de la superficie del piso.
+// Z = 7 lo acerca al frente.
+//
+// Para moverlo, cambia los números de vasoAguaGroup.
+// Ejemplo: vasoAguaGroup(10, 10, 7)
+
 const VASO_AGUA = vasoAguaGroup(20, 10, 7);
+
+// Tamaño del objeto en X, Y, Z.
+// Un valor menor a 1 reduce su tamaño.
+
 VASO_AGUA.scale.set(0.2, 0.2, 0.2);
+
 scene.add(VASO_AGUA);
 
+
+// ------------------------------------------
 // BOTELLA
-const BOTELLA = botellaGroup(-19, 10, 7);
+// ------------------------------------------
+
+// Posición inicial: (-19, 10, 7)
+// X = -19 la coloca hacia la izquierda.
+// Y = 10 corresponde a la altura del piso intermedio.
+// Z = 7 la coloca hacia el frente.
+//
+// Cambia estos valores para reubicarla.
+
+const BOTELLA = botellaGroup(-22, 10, 20);
+
+// Escala independiente de la botella.
+// En este caso es un poco más alta que ancha.
+
 BOTELLA.scale.set(0.2, 0.3, 0.2);
+
 scene.add(BOTELLA);
 
+
+// ------------------------------------------
 // PAPEL PICADO
+// ------------------------------------------
+
+// Posición inicial: (0, 16.2, 11.2)
+// X = 0 lo centra horizontalmente.
+// Y = 16.2 lo sitúa por encima del piso intermedio.
+// Z = 11.2 lo acerca al frente.
+//
+// Si quieres subirlo, aumenta Y.
+// Si quieres alejarlo hacia atrás, reduce Z.
+
 const PAPEL = papelGroup(0, 16.2, 11.2);
+
+// Escala del papel picado.
+// Aumenta los valores para hacerlo más grande.
+
 PAPEL.scale.set(0.5, 0.5, 0.5);
+
 scene.add(PAPEL);
 
+
+// ------------------------------------------
 // VELA
-const VELA = vasoGroup(-13, 18, 3);
+// ------------------------------------------
+
+// Posición inicial: (-13, 18, 3)
+// X = -13 la coloca hacia la izquierda.
+// Y = 18 la coloca sobre el piso superior.
+// Z = 3 la acerca ligeramente al frente.
+//
+// Cambia las coordenadas para acomodarla.
+
+const VELA = vasoGroup(-13, 16, 13);
+
+// Escala de la vela.
+
 VELA.scale.set(0.5, 0.5, 0.5);
+
 scene.add(VELA);
 
+
+// ------------------------------------------
 // TIRA DE FLORES
-const FLOR = flores(-13, 18, 3);
+// ------------------------------------------
+
+// Posición inicial: (-13, 18, 3)
+// Actualmente comparte posición con la vela.
+//
+// Para separarlas, cambia sus coordenadas.
+// Ejemplo: flores(-5, 17, 8)
+
+const FLOR = flores(-13, 18, 50);
+
+// Escala de las flores.
+// Modifica estos valores si se ven muy grandes
+// o demasiado pequeñas.
+
 FLOR.scale.set(0.5, 0.5, 0.5);
+
 scene.add(FLOR);
 
-// RENDERIZADO
+
+// ==========================================
+// 10. RENDERIZAR LA ESCENA
+// ==========================================
+
 function render() {
+
+    // Actualiza los controles de la cámara.
     controls.update();
+
+    // Dibuja los objetos en pantalla.
     renderer.render(scene, camera);
+
+    // Repite el renderizado.
     requestAnimationFrame(render);
 }
 
 render();
 
 
-// AJUSTAR TAMAÑO DE VENTANA
+// ==========================================
+// 11. AJUSTAR LA VENTANA DEL NAVEGADOR
+// ==========================================
+
 window.addEventListener('resize', function() {
+
+    // Ajustar proporción de la cámara.
     camera.aspect = window.innerWidth / window.innerHeight;
+
     camera.updateProjectionMatrix();
+
+    // Ajustar el tamaño del renderizado.
     renderer.setSize(window.innerWidth, window.innerHeight);
+
     renderer.setPixelRatio(window.devicePixelRatio);
+
 });
 
 </script>
