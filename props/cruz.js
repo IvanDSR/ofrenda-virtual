@@ -12,19 +12,19 @@ export default function cruzGroup(x, y, z) {
     var geoVertical = new THREE.BoxGeometry(0.8, 6.0, 0.6);
     var meshVertical = new THREE.Mesh(geoVertical, matMadera);
     meshVertical.position.set(0, 3.0, 0);
-    grupoCruz.add(meshVertical);
+    //grupoCruz.add(meshVertical);
 
     //  PALO HORIZONTAL (BRAZOS)
     var geoHorizontal = new THREE.BoxGeometry(4.0, 0.8, 0.6);
     var meshHorizontal = new THREE.Mesh(geoHorizontal, matMadera);
     meshHorizontal.position.set(0, 4.2, 0);
-    grupoCruz.add(meshHorizontal);
+    //grupoCruz.add(meshHorizontal);
 
     // DETALLE DE UNIÓN AL CENTRO
     var geoUnion = new THREE.BoxGeometry(1.0, 1.0, 0.7);
     var meshUnion = new THREE.Mesh(geoUnion, matMadera);
     meshUnion.position.set(0, 4.2, 0);
-    grupoCruz.add(meshUnion);
+    //grupoCruz.add(meshUnion);
 
     // GRUPO FINAL
     const grupoCruz = new THREE.Group();
