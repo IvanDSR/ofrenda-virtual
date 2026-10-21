@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ofrenda de tres pisos</title>
+    <title>Ofrenda</title>
 
     <style>
         body {
@@ -22,36 +21,51 @@
 
 <canvas id="myCanvas"></canvas>
 
-<!-- LIBRERÍAS DE THREE.JS -->
 <script type="importmap">
 {
     "imports": {
         "three": "./js/three.module.js",
         "three/OrbitControls": "./js/OrbitControls.js"
+       
     }
 }
 </script>
 
 <script type="module">
+    import { TextGeometry } from './js/TextGeometry.js';
+import { FontLoader } from './js/FontLoader.js';
 
-// ==========================================
-// 1. IMPORTAR LIBRERÍAS Y OBJETOS
-// ==========================================
-
+// LIBRERÍAS Y COMPONENTES
 import * as THREE from 'three';
 import { OrbitControls } from 'three/OrbitControls';
-
 import vasoAguaGroup from "./props/vaso_agua.js";
 import botellaGroup from "./props/botella.js";
 import papelGroup from "./props/papel_picado.js";
 import vasoGroup from "./props/vela.js";
-import flores from "./props/flor.js";
+import tiraGroup from "./props/flor.js";
+import tiramorGroup from "./props/flor_morada.js";
+import floreroGroup from "./props/florero.js";
+import barroGroup from "./props/vaso_barro.js";
+import grupo from "./props/papel_abajo.js";
+import papelAbajo2Group from "./props/papel_abajo2.js"
+import fondoGroup from "./props/fondo.js";
+import grupoShot from "./props/caballito.js";
+import panGroup from "./props/pan_de_muerto.js";
+import salGroup from "./props/plato_sal.js";
+import frutasGroup from "./props/fruta.js";
+import tamalesGroup from "./props/tamales.js";
+import cervezaGroup from "./props/cerveza.js";
+import mascotaGroup from "./props/perrito.js";
+import marcoGroup from "./props/retrato1.js";
+import marco2Group from "./props/retrato2.js";
+import marco3Group from "./props/retrato3.js";
+import marco4Group from "./props/retrato4.js";
+import marco5Group from "./props/retrato5.js";
+import copalGroup from "./props/copal.js";
+import calaveraGroup from "./props/calavera.js";
+import grupoCruz from "./props/cruz.js";
 
-
-// ==========================================
-// 2. CONFIGURACIÓN DEL RENDERIZADO
-// ==========================================
-
+// RENDERER
 var renderer = new THREE.WebGLRenderer({
     canvas: document.getElementById('myCanvas'),
     antialias: true
@@ -62,18 +76,12 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0x70707C);
 
 
-// ==========================================
-// 3. CREAR ESCENA
-// ==========================================
-
+// ESCENA
 var scene = new THREE.Scene();
 scene.background = new THREE.Color(0x70707C);
 
 
-// ==========================================
-// 4. CÁMARA
-// ==========================================
-
+// CÁMARA
 var camera = new THREE.PerspectiveCamera(
     45,
     window.innerWidth / window.innerHeight,
@@ -81,250 +89,341 @@ var camera = new THREE.PerspectiveCamera(
     1000
 );
 
-// POSICIÓN DE LA CÁMARA
-// X = izquierda/derecha
-// Y = altura de la cámara
-// Z = distancia hacia delante/atrás
-
 camera.position.set(0, 28, 100);
-
-// PUNTO AL QUE MIRA LA CÁMARA
-// Cambia estos valores si quieres centrar otra zona.
-
 camera.lookAt(0, 14, 0);
 scene.add(camera);
 
 
-// ==========================================
-// 5. CONTROLES DE LA CÁMARA
-// ==========================================
-
+// CONTROLES
 var controls = new OrbitControls(camera, renderer.domElement);
-
 controls.enableDamping = true;
 controls.dampingFactor = 0.05;
-
-// Centro de rotación de la cámara
 controls.target.set(0, 14, 0);
 controls.update();
 
+// RENDERER
+var renderer = new THREE.WebGLRenderer({
+    canvas: document.getElementById('myCanvas'),
+    antialias: true
+});
 
-// ==========================================
-// 6. ILUMINACIÓN
-// ==========================================
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x110E1B); 
 
-var luz = new THREE.AmbientLight(0xffffff, 1);
-scene.add(luz);
+// SOMBRAS 
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+// ESCENA
+var scene = new THREE.Scene();
+scene.background = new THREE.Color(0x110E1B);
+
+// CÁMARA
+var camera = new THREE.PerspectiveCamera(
+    45,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+);
+
+camera.position.set(0, 28, 100);
+camera.lookAt(0, 14, 0);
+scene.add(camera);
+
+// CONTROLES
+var controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+controls.target.set(0, 14, 0);
+controls.update();
+
+// 1. Luz ambiental cálida suave
+var light1 = new THREE.AmbientLight(0xFFD3A5, 0.6);
+scene.add(light1);
+
+// 2. Luz principal (SpotLight) frontal-superior hacia el centro de la ofrenda
+var spotLight1 = new THREE.SpotLight(
+    0xFFFAF0, 120, 150, Math.PI / 3, 0.4
+);
+spotLight1.position.set(0, 55, 60);
+spotLight1.target.position.set(0, 10, 0);
+spotLight1.castShadow = true;
+spotLight1.shadow.mapSize.width = 1024;
+spotLight1.shadow.mapSize.height = 1024;
+
+scene.add(spotLight1);
+scene.add(spotLight1.target);
+
+// 3. Luz lateral izquierda cálida (Naranja Cempasúchil)
+var spotLight2 = new THREE.SpotLight(
+    0xFF7700, 90, 120, Math.PI / 3, 0.5
+);
+spotLight2.position.set(-35, 30, 25);
+spotLight2.target.position.set(-5, 9, 0);
+spotLight2.castShadow = true;
+
+scene.add(spotLight2);
+scene.add(spotLight2.target);
+
+// 4. Luz lateral derecha (Morada / Mística)
+var spotLight3 = new THREE.SpotLight(
+    0x9933FF, 90, 120, Math.PI / 3, 0.5
+);
+spotLight3.position.set(35, 30, 25);
+spotLight3.target.position.set(5, 9, 0);
+
+scene.add(spotLight3);
+scene.add(spotLight3.target);
 
 
-// ==========================================
-// 7. MATERIAL DE LOS PISOS
-// ==========================================
-
-var materialOfrenda = new THREE.MeshBasicMaterial({
-    color: 0xFFFFFF
+// MATERIAL BLANCO SENSIBLE A LA LUZ (MeshStandardMaterial permite recibir sombras y luces)
+var materialOfrenda = new THREE.MeshStandardMaterial({
+    color: 0xFFFFFF,
+    roughness: 0.5,
+    metalness: 0.1
 });
 
 
-// ==========================================
-// 8. CONSTRUCCIÓN DE LOS TRES PISOS
-// ==========================================
-
+// BASE DE OFRENDA DE TRES PISOS
 // PISO INFERIOR
-// Tamaño: ancho 50, alto 8, profundidad 26
-// Posición Y = 4
-// El piso ocupa aproximadamente desde Y = 0 hasta Y = 8.
-
-var geometriaPiso1 = new THREE.BoxGeometry(50, 8, 26);
+var geometriaPiso1 = new THREE.BoxGeometry(50, 6, 26);
 var piso1 = new THREE.Mesh(geometriaPiso1, materialOfrenda);
+piso1.position.set(0, 3, 0);
+scene.add(piso1);
 
-piso1.position.set(0, 4, 0);
-//scene.add(piso1);
-
-
-// PISO INTERMEDIO
-// Tamaño: ancho 40, alto 8, profundidad 22
-// Posición Y = 12
-// El piso ocupa desde Y = 8 hasta Y = 16.
-
-var geometriaPiso2 = new THREE.BoxGeometry(40, 8, 22);
+// PISO 2 (INTERMEDIO)
+var geometriaPiso2 = new THREE.BoxGeometry(40, 6, 18);
 var piso2 = new THREE.Mesh(geometriaPiso2, materialOfrenda);
+piso2.position.set(0, 9, -4);
+scene.add(piso2);
 
-piso2.position.set(0, 12, -2);
-//scene.add(piso2);
-
-
-// PISO SUPERIOR
-// Tamaño: ancho 30, alto 8, profundidad 18
-// Posición Y = 20
-// El piso ocupa desde Y = 16 hasta Y = 24.
-
-var geometriaPiso3 = new THREE.BoxGeometry(30, 8, 18);
+// PISO 3 (SUPERIOR)
+var geometriaPiso3 = new THREE.BoxGeometry(30, 6, 10);
 var piso3 = new THREE.Mesh(geometriaPiso3, materialOfrenda);
-
-piso3.position.set(0, 20, -3);
+piso3.position.set(0, 15, -8);
 scene.add(piso3);
 
+//PROPS
+// FONDO Y DECORACIONES TRASERAS
+const FONDO = fondoGroup(0, 0, -15);
+FONDO.scale.set(1.7, 2, 1.7); 
+scene.add(FONDO);
 
-// ==========================================
-// 9. COLOCAR LOS OBJETOS DE LA OFRENDA
-// ==========================================
+// TIRAS DE FLORES (Colgadas al fondo)
+const FLOR_IZQ = tiraGroup(-23, 16, -13);
+FLOR_IZQ.scale.set(1, 1.8, 1);
+scene.add(FLOR_IZQ);
 
-// IMPORTANTE:
-// Cada objeto tiene tres coordenadas: X, Y, Z.
-// X: izquierda (-) y derecha (+).
-// Y: abajo (-) y arriba (+).
-// Z: atrás (-) y frente (+).
-//
-// Para mover un objeto, cambia los tres números
-// dentro de .position o dentro de la función.
-// Para cambiar su tamaño, modifica .scale.
-//
-// Estos objetos se agregan a la escena por separado.
+const FLOR_DER = tiraGroup(12, 16, -13);
+FLOR_DER.scale.set(1, 1.8, 1);
+scene.add(FLOR_DER);
+
+const FLORMOR_IZQ = tiramorGroup(-12, 16, -13);
+FLORMOR_IZQ.scale.set(1, 1.8, 1);
+scene.add(FLORMOR_IZQ);
+
+const FLORMOR_DER = tiramorGroup(23, 16, -13);
+FLORMOR_DER.scale.set(1, 1.8, 1);
+scene.add(FLORMOR_DER);
+
+// PAPEL PICADO 
+const PAPEL = papelGroup(0, 8.5, -2.8);
+PAPEL.scale.set(0.6, 0.4, 0.6);
+scene.add(PAPEL); 
+const PAPELAB = papelGroup(0, 7, 5.3);
+PAPELAB.scale.set(0.6, 0.2, 0.6);
+scene.add(PAPELAB); 
+
+// PAPEL PICADO ABAJO
+const PAPEL_DER = grupo(12.5, 3, 13.1);
+PAPEL_DER.scale.set(1, 0.9, 1);
+scene.add(PAPEL_DER);
+// PAPEL PICADO ABAJO naranja 
+const PAPEL_IZQ = papelAbajo2Group(-12.5, 3, 13.1);
+PAPEL_IZQ.scale.set(1, 0.9, 1);
+scene.add(PAPEL_IZQ);
+
+// PROPS EN PISO SUPERIOR
+// Florero 
+const FLORERO = floreroGroup(-9, 18, -8);
+FLORERO.scale.set(1, 1, 1);
+scene.add(FLORERO);
+// Veladora (Derecha)
+const VELA1 = vasoGroup(9, 18, -8);
+VELA1.scale.set(0.5, 0.5, 0.5);
+scene.add(VELA1);
+// MARCO 1 
+const RETRATO1 = marcoGroup(0,18, -6);
+RETRATO1.scale.set(5, 5, 5);
+scene.add(RETRATO1);
+// CALAVERA
+const CALAVERA = calaveraGroup(0,18, -6);
+CALAVERA.scale.set(1, 1, 1);
+scene.add(CALAVERA);
+// CRUZ
+const CRUZ = grupoCruz(0,16, -12);
+CRUZ.scale.set(4, 4, 3);
+scene.add(CRUZ);
+
+// PROPS EN PISO INTERMEDIO 
+// Veladoras laterales
+const VELA2 = vasoGroup(-16, 12, 0);
+VELA2.scale.set(0.5, 0.5, 0.5);
+scene.add(VELA2);
+// PELOTA Y CROQUETAS DE PERRO
+const MASCOTA = mascotaGroup(-5, 12, 3.5);
+MASCOTA.scale.set(0.6, 0.6, 0.6);
+scene.add(MASCOTA);
+const VELA3 = vasoGroup(16, 12, 0);
+VELA3.scale.set(0.5, 0.5, 0.5);
+scene.add(VELA3);
+// MARCO 2
+const RETRATO2 = marco2Group(-9,12,0);
+RETRATO2.scale.set(4.5, 4.5, 4.5);
+scene.add(RETRATO2);
+// MARCO 3
+const RETRATO3 = marco3Group(9,12,0);
+RETRATO3.scale.set(4.5, 4.5, 4.5);
+scene.add(RETRATO3);
+//COPAL
+const COPAL = copalGroup(0,12,0);
+COPAL.scale.set(1.5, 1.5, 1.5);
+scene.add(COPAL);
 
 
-// ------------------------------------------
-// VASO DE AGUA
-// ------------------------------------------
-
-// Posición inicial: (20, 10, 7)
-// Está pensado para el piso intermedio.
-// X = 20 lo acerca al extremo derecho.
-// Y = 10 lo coloca cerca de la superficie del piso.
-// Z = 7 lo acerca al frente.
-//
-// Para moverlo, cambia los números de vasoAguaGroup.
-// Ejemplo: vasoAguaGroup(10, 10, 7)
-
-const VASO_AGUA = vasoAguaGroup(20, 10, 7);
-
-// Tamaño del objeto en X, Y, Z.
-// Un valor menor a 1 reduce su tamaño.
-
-VASO_AGUA.scale.set(0.2, 0.2, 0.2);
-
-scene.add(VASO_AGUA);
-
-
-// ------------------------------------------
-// BOTELLA
-// ------------------------------------------
-
-// Posición inicial: (-19, 10, 7)
-// X = -19 la coloca hacia la izquierda.
-// Y = 10 corresponde a la altura del piso intermedio.
-// Z = 7 la coloca hacia el frente.
-//
-// Cambia estos valores para reubicarla.
-
-const BOTELLA = botellaGroup(-22, 10, 20);
-
-// Escala independiente de la botella.
-// En este caso es un poco más alta que ancha.
-
+// PROPS EN PISO INFERIOR 
+//Botella
+const BOTELLA = botellaGroup(-22.5, 5, 4);
 BOTELLA.scale.set(0.2, 0.3, 0.2);
-
 scene.add(BOTELLA);
+//shot
+const SHOT = grupoShot(-17, 6, 8);
+SHOT.scale.set(1, 1, 1);
+scene.add(SHOT);
+//vaso de barro 
+const BARRO = barroGroup(-21, 6, 10);
+BARRO.scale.set(0.1, 0.2, 0.1);
+scene.add(BARRO);
+//sal
+const SAL = salGroup(-13.5, 6, 10);
+SAL.scale.set(0.2, 0.2, 0.2);
+scene.add(SAL);
+//vaso de agua
+const VASO_AGUA = vasoAguaGroup(20, 6, 8);
+VASO_AGUA.scale.set(0.3, 0.3, 0.3);
+scene.add(VASO_AGUA);
+//pan 
+const PAN = panGroup(-12, 6, 10.5);
+PAN.scale.set(0.2, 0.2, 0.2);
+scene.add(PAN);
+const PAN2 = panGroup(13.5, 6, 10.5);
+PAN2.scale.set(0.2, 0.2, 0.2);
+scene.add(PAN2);
+//fruta
+const FRUTAS = frutasGroup(-7, 6, 10);
+FRUTAS.scale.set(1.5, 1.5, 1.5); 
+scene.add(FRUTAS);
+//tamales 
+const TAMALES = tamalesGroup(8, 6, 10.5);
+TAMALES.scale.set(1.5, 1.5, 1.5); 
+scene.add(TAMALES);
+// CERVEZA EN LATA 
+const CERVEZA = cervezaGroup(18, 6, 8);
+CERVEZA.scale.set(0.4, 0.5, 0.4);
+scene.add(CERVEZA);
+// MARCO 4
+const RETRATO4 = marco4Group(-10,6,8);
+RETRATO4.scale.set(4, 4, 4);
+scene.add(RETRATO4);
+// MARCO 5
+const RETRATO5 = marco5Group(10,6,8);
+RETRATO5.scale.set(4, 4, 4);
+scene.add(RETRATO5);
 
 
-// ------------------------------------------
-// PAPEL PICADO
-// ------------------------------------------
+var loaderTexto = new FontLoader();
 
-// Posición inicial: (0, 16.2, 11.2)
-// X = 0 lo centra horizontalmente.
-// Y = 16.2 lo sitúa por encima del piso intermedio.
-// Z = 11.2 lo acerca al frente.
-//
-// Si quieres subirlo, aumenta Y.
-// Si quieres alejarlo hacia atrás, reduce Z.
+loaderTexto.load(
+    "./font/helvetiker_bold.typeface.json",
+    function(font) {
 
-const PAPEL = papelGroup(0, 16.2, 11.2);
+        var lineas = [
+            "QUE HOY TU RECUERDO",
+            "SE CONVIERTA EN EL ULTIMO ABRAZO",
+            "QUE NO TE PUDE DAR"
+        ];
 
-// Escala del papel picado.
-// Aumenta los valores para hacerlo más grande.
+        var matTexto = new THREE.MeshStandardMaterial({
+            color: 0xFFD700,         
+            emissive: 0xFF8800,      
+            emissiveIntensity: 0.35,  
+            metalness: 0.2,
+            roughness: 0.3
+        });
 
-PAPEL.scale.set(0.5, 0.5, 0.5);
+        var grupoTexto = new THREE.Group();
+        var tamañoLetra = 1.3;        
+        var altoEntreLineas = 2.0;
 
-scene.add(PAPEL);
+        for (var i = 0; i < lineas.length; i++) {
+            var geoLinea = new TextGeometry(lineas[i], {
+                font: font,
+                size: tamañoLetra,
+                height: 0.5,         
+                curveSegments: 12,
+                bevelEnabled: true,
+                bevelThickness: 0.04,
+                bevelSize: 0.03,
+                bevelSegments: 3
+            });
+
+            geoLinea.computeBoundingBox();
+            var centroX = (geoLinea.boundingBox.max.x - geoLinea.boundingBox.min.x) / 2;
+            var meshLinea = new THREE.Mesh(geoLinea, matTexto);
+            meshLinea.position.set(-centroX, (lineas.length - 1 - i) * altoEntreLineas, 0.2);
+            meshLinea.castShadow = true;
+            grupoTexto.add(meshLinea);
+        }
+
+        // PLACA NEGRA 
+        var geoPlaca = new THREE.PlaneGeometry(36, 7.5);
+        var matPlaca = new THREE.MeshBasicMaterial({
+            color: 0x000000,
+            transparent: true,
+            opacity: 0.55            
+        });
+        var meshPlaca = new THREE.Mesh(geoPlaca, matPlaca);
+        meshPlaca.position.set(0, 2.0, 0); 
+        grupoTexto.add(meshPlaca);
+
+        grupoTexto.position.set(0, 42, -11);
+        scene.add(grupoTexto);
+    },
+    undefined,
+    function(error) {
+        console.error("Error al cargar la fuente para el texto:", error);
+    }
+);
 
 
-// ------------------------------------------
-// VELA
-// ------------------------------------------
 
-// Posición inicial: (-13, 18, 3)
-// X = -13 la coloca hacia la izquierda.
-// Y = 18 la coloca sobre el piso superior.
-// Z = 3 la acerca ligeramente al frente.
-//
-// Cambia las coordenadas para acomodarla.
-
-const VELA = vasoGroup(-13, 16, 13);
-
-// Escala de la vela.
-
-VELA.scale.set(0.5, 0.5, 0.5);
-
-scene.add(VELA);
-
-
-// ------------------------------------------
-// TIRA DE FLORES
-// ------------------------------------------
-
-// Posición inicial: (-13, 18, 3)
-// Actualmente comparte posición con la vela.
-//
-// Para separarlas, cambia sus coordenadas.
-// Ejemplo: flores(-5, 17, 8)
-
-const FLOR = flores(-13, 18, 50);
-
-// Escala de las flores.
-// Modifica estos valores si se ven muy grandes
-// o demasiado pequeñas.
-
-FLOR.scale.set(0.5, 0.5, 0.5);
-
-scene.add(FLOR);
-
-
-// ==========================================
-// 10. RENDERIZAR LA ESCENA
-// ==========================================
-
+// RENDERIZADO
 function render() {
-
-    // Actualiza los controles de la cámara.
     controls.update();
-
-    // Dibuja los objetos en pantalla.
     renderer.render(scene, camera);
-
-    // Repite el renderizado.
     requestAnimationFrame(render);
 }
 
 render();
 
 
-// ==========================================
-// 11. AJUSTAR LA VENTANA DEL NAVEGADOR
-// ==========================================
-
+// AJUSTAR TAMAÑO DE VENTANA
 window.addEventListener('resize', function() {
-
-    // Ajustar proporción de la cámara.
     camera.aspect = window.innerWidth / window.innerHeight;
-
     camera.updateProjectionMatrix();
-
-    // Ajustar el tamaño del renderizado.
     renderer.setSize(window.innerWidth, window.innerHeight);
-
     renderer.setPixelRatio(window.devicePixelRatio);
-
 });
 
 </script>
