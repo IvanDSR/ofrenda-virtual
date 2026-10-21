@@ -51,7 +51,7 @@ export default function E03(x, y, z) {
 
 
     const vasoGroup = new THREE.Group();
-    vasoGroup.add(mesh01, mesh02, mesh03, mesh04, meshSticker);
+    vasoGroup.add(mesh01,mesh02,mesh03, mesh04,meshSticker);
     vasoGroup.position.set(x, y, z);
     return vasoGroup;
 

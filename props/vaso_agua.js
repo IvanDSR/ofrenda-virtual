@@ -9,7 +9,7 @@ export default function     E01(x, y, z) {
         opacity: 0.4 
     }); 
     var meshVaso = new THREE.Mesh(vaso, materialVaso); 
-    meshVaso.position.set(0, 7.5, 0); // Ajustado relativo al grupo
+    meshVaso.position.set(0, 7.5, 0); 
     //vasoAguaGroup.add(meshVaso);
 
     // AGUA INTERIOR
