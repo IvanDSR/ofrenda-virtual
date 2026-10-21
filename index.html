@@ -22,54 +22,52 @@
 
 <canvas id="myCanvas"></canvas>
 
-<!-- IMPORT MAP CON RUTAS APUNTANDO A THREE-JS/public/ -->
 <script type="importmap">
 {
     "imports": {
-        "three": "./THREE-JS/public/js/three.module.js",
-        "three/OrbitControls": "./THREE-JS/public/js/OrbitControls.js"
+        "three": "./js/three.module.js",
+        "three/OrbitControls": "./js/OrbitControls.js"
     }
 }
 </script>
 
 <script type="module">
-import { TextGeometry } from './THREE-JS/public/js/TextGeometry.js';
-import { FontLoader } from './THREE-JS/public/js/FontLoader.js';
+import { TextGeometry } from './js/TextGeometry.js';
+import { FontLoader } from './js/FontLoader.js';
 
 // LIBRERÍAS Y COMPONENTES
 import * as THREE from 'three';
 import { OrbitControls } from 'three/OrbitControls';
-import vasoAguaGroup from "./THREE-JS/public/props/vaso_agua.js";
-import botellaGroup from "./THREE-JS/public/props/botella.js";
-import papelGroup from "./THREE-JS/public/props/papel_picado.js";
-import vasoGroup from "./THREE-JS/public/props/vela.js";
-import tiraGroup from "./THREE-JS/public/props/flor.js";
-import tiramorGroup from "./THREE-JS/public/props/flor_morada.js";
-import floreroGroup from "./THREE-JS/public/props/florero.js";
-import barroGroup from "./THREE-JS/public/props/vaso_barro.js";
-import grupo from "./THREE-JS/public/props/papel_abajo.js";
-import papelAbajo2Group from "./THREE-JS/public/props/papel_abajo2.js";
-import fondoGroup from "./THREE-JS/public/props/fondo.js";
-import grupoShot from "./THREE-JS/public/props/caballito.js";
-import panGroup from "./THREE-JS/public/props/pan_de_muerto.js";
-import salGroup from "./THREE-JS/public/props/plato_sal.js";
-import frutasGroup from "./THREE-JS/public/props/fruta.js";
-import tamalesGroup from "./THREE-JS/public/props/tamales.js";
-import cervezaGroup from "./THREE-JS/public/props/cerveza.js";
-import mascotaGroup from "./THREE-JS/public/props/perrito.js";
-import marcoGroup from "./THREE-JS/public/props/retrato1.js";
-import marco2Group from "./THREE-JS/public/props/retrato2.js";
-import marco3Group from "./THREE-JS/public/props/retrato3.js";
-import marco4Group from "./THREE-JS/public/props/retrato4.js";
-import marco5Group from "./THREE-JS/public/props/retrato5.js";
-import copalGroup from "./THREE-JS/public/props/copal.js";
-import calaveraGroup from "./THREE-JS/public/props/calavera.js";
-import grupoCruz from "./THREE-JS/public/props/cruz.js";
+import vasoAguaGroup from "./props/vaso_agua.js";
+import botellaGroup from "./props/botella.js";
+import papelGroup from "./props/papel_picado.js";
+import vasoGroup from "./props/vela.js";
+import tiraGroup from "./props/flor.js";
+import tiramorGroup from "./props/flor_morada.js";
+import floreroGroup from "./props/florero.js";
+import barroGroup from "./props/vaso_barro.js";
+import grupo from "./props/papel_abajo.js";
+import papelAbajo2Group from "./props/papel_abajo2.js";
+import fondoGroup from "./props/fondo.js";
+import grupoShot from "./props/caballito.js";
+import panGroup from "./props/pan_de_muerto.js";
+import salGroup from "./props/plato_sal.js";
+import frutasGroup from "./props/fruta.js";
+import tamalesGroup from "./props/tamales.js";
+import cervezaGroup from "./props/cerveza.js";
+import mascotaGroup from "./props/perrito.js";
+import marcoGroup from "./props/retrato1.js";
+import marco2Group from "./props/retrato2.js";
+import marco3Group from "./props/retrato3.js";
+import marco4Group from "./props/retrato4.js";
+import marco5Group from "./props/retrato5.js";
+import copalGroup from "./props/copal.js";
+import calaveraGroup from "./props/calavera.js";
+import grupoCruz from "./props/cruz.js";
 
 // RENDERER ÚNICO
-const canvas = document.getElementById('myCanvas');
 var renderer = new THREE.WebGLRenderer({
-    canvas: canvas,
+    canvas: document.getElementById('myCanvas'),
     antialias: true
 });
 
@@ -107,43 +105,180 @@ controls.update();
 var light1 = new THREE.AmbientLight(0xFFD3A5, 0.6);
 scene.add(light1);
 
-var spotLight1 = new THREE.SpotLight(
-    0xFFFAF0, 120, 150, Math.PI / 3, 0.4
-);
+var spotLight1 = new THREE.SpotLight(0xFFFAF0, 120, 150, Math.PI / 3, 0.4);
 spotLight1.position.set(0, 55, 60);
 spotLight1.target.position.set(0, 10, 0);
 spotLight1.castShadow = true;
 spotLight1.shadow.mapSize.width = 1024;
 spotLight1.shadow.mapSize.height = 1024;
-
 scene.add(spotLight1);
 scene.add(spotLight1.target);
 
-var spotLight2 = new THREE.SpotLight(
-    0xFF7700, 90, 120, Math.PI / 3, 0.5
-);
+var spotLight2 = new THREE.SpotLight(0xFF7700, 90, 120, Math.PI / 3, 0.5);
 spotLight2.position.set(-35, 30, 25);
 spotLight2.target.position.set(-5, 9, 0);
 spotLight2.castShadow = true;
-
 scene.add(spotLight2);
 scene.add(spotLight2.target);
 
-var spotLight3 = new THREE.SpotLight(
-    0x9933FF, 90, 120, Math.PI / 3, 0.5
-);
+var spotLight3 = new THREE.SpotLight(0x9933FF, 90, 120, Math.PI / 3, 0.5);
 spotLight3.position.set(35, 30, 25);
 spotLight3.target.position.set(5, 9, 0);
-
 scene.add(spotLight3);
 scene.add(spotLight3.target);
 
-// MATERIAL BLANCO SENSIBLE A LA LUZ
+// MATERIAL BASE
 var materialOfrenda = new THREE.MeshStandardMaterial({
     color: 0xFFFFFF,
     roughness: 0.5,
     metalness: 0.1
 });
 
-// BASE DE OFRENDA DE TRES PISOS
-var geometriaPiso1 = new THREE.BoxGeometry(50,
+// PISOS
+var piso1 = new THREE.Mesh(new THREE.BoxGeometry(50, 6, 26), materialOfrenda);
+piso1.position.set(0, 3, 0);
+scene.add(piso1);
+
+var piso2 = new THREE.Mesh(new THREE.BoxGeometry(40, 6, 18), materialOfrenda);
+piso2.position.set(0, 9, -4);
+scene.add(piso2);
+
+var piso3 = new THREE.Mesh(new THREE.BoxGeometry(30, 6, 10), materialOfrenda);
+piso3.position.set(0, 15, -8);
+scene.add(piso3);
+
+// PROPS
+const cargarProp = (fn, x, y, z, sx = 1, sy = 1, sz = 1) => {
+    try {
+        const obj = fn(x, y, z);
+        if (obj) {
+            obj.scale.set(sx, sy, sz);
+            scene.add(obj);
+        }
+    } catch (err) {
+        console.warn("Error al agregar prop:", err);
+    }
+};
+
+// FONDO Y DECORACIONES
+cargarProp(fondoGroup, 0, 0, -15, 1.7, 2, 1.7);
+cargarProp(tiraGroup, -23, 16, -13, 1, 1.8, 1);
+cargarProp(tiraGroup, 12, 16, -13, 1, 1.8, 1);
+cargarProp(tiramorGroup, -12, 16, -13, 1, 1.8, 1);
+cargarProp(tiramorGroup, 23, 16, -13, 1, 1.8, 1);
+
+// PAPEL PICADO
+cargarProp(papelGroup, 0, 8.5, -2.8, 0.6, 0.4, 0.6);
+cargarProp(papelGroup, 0, 7, 5.3, 0.6, 0.2, 0.6);
+cargarProp(grupo, 12.5, 3, 13.1, 1, 0.9, 1);
+cargarProp(papelAbajo2Group, -12.5, 3, 13.1, 1, 0.9, 1);
+
+// PISO SUPERIOR
+cargarProp(floreroGroup, -9, 18, -8, 1, 1, 1);
+cargarProp(vasoGroup, 9, 18, -8, 0.5, 0.5, 0.5);
+cargarProp(marcoGroup, 0, 18, -6, 5, 5, 5);
+cargarProp(calaveraGroup, 0, 18, -6, 1, 1, 1);
+cargarProp(grupoCruz, 0, 16, -12, 4, 4, 3);
+
+// PISO INTERMEDIO
+cargarProp(vasoGroup, -16, 12, 0, 0.5, 0.5, 0.5);
+cargarProp(mascotaGroup, -5, 12, 3.5, 0.6, 0.6, 0.6);
+cargarProp(vasoGroup, 16, 12, 0, 0.5, 0.5, 0.5);
+cargarProp(marco2Group, -9, 12, 0, 4.5, 4.5, 4.5);
+cargarProp(marco3Group, 9, 12, 0, 4.5, 4.5, 4.5);
+cargarProp(copalGroup, 0, 12, 0, 1.5, 1.5, 1.5);
+
+// PISO INFERIOR
+cargarProp(botellaGroup, -22.5, 5, 4, 0.2, 0.3, 0.2);
+cargarProp(grupoShot, -17, 6, 8, 1, 1, 1);
+cargarProp(barroGroup, -21, 6, 10, 0.1, 0.2, 0.1);
+cargarProp(salGroup, -13.5, 6, 10, 0.2, 0.2, 0.2);
+cargarProp(vasoAguaGroup, 20, 6, 8, 0.3, 0.3, 0.3);
+cargarProp(panGroup, -12, 6, 10.5, 0.2, 0.2, 0.2);
+cargarProp(panGroup, 13.5, 6, 10.5, 0.2, 0.2, 0.2);
+cargarProp(frutasGroup, -7, 6, 10, 1.5, 1.5, 1.5);
+cargarProp(tamalesGroup, 8, 6, 10.5, 1.5, 1.5, 1.5);
+cargarProp(cervezaGroup, 18, 6, 8, 0.4, 0.5, 0.4);
+cargarProp(marco4Group, -10, 6, 8, 4, 4, 4);
+cargarProp(marco5Group, 10, 6, 8, 4, 4, 4);
+
+// TEXTO 3D
+var loaderTexto = new FontLoader();
+
+loaderTexto.load(
+    "./font/helvetiker_bold.typeface.json",
+    function(font) {
+        var lineas = [
+            "QUE HOY TU RECUERDO",
+            "SE CONVIERTA EN EL ULTIMO ABRAZO",
+            "QUE NO TE PUDE DAR"
+        ];
+
+        var matTexto = new THREE.MeshStandardMaterial({
+            color: 0xFFD700,         
+            emissive: 0xFF8800,      
+            emissiveIntensity: 0.35,  
+            metalness: 0.2,
+            roughness: 0.3
+        });
+
+        var grupoTexto = new THREE.Group();
+
+        for (var i = 0; i < lineas.length; i++) {
+            var geoLinea = new TextGeometry(lineas[i], {
+                font: font,
+                size: 1.3,
+                height: 0.5,         
+                curveSegments: 12,
+                bevelEnabled: true,
+                bevelThickness: 0.04,
+                bevelSize: 0.03,
+                bevelSegments: 3
+            });
+
+            geoLinea.computeBoundingBox();
+            var centroX = (geoLinea.boundingBox.max.x - geoLinea.boundingBox.min.x) / 2;
+            var meshLinea = new THREE.Mesh(geoLinea, matTexto);
+            meshLinea.position.set(-centroX, (lineas.length - 1 - i) * 2.0, 0.2);
+            meshLinea.castShadow = true;
+            grupoTexto.add(meshLinea);
+        }
+
+        var geoPlaca = new THREE.PlaneGeometry(36, 7.5);
+        var matPlaca = new THREE.MeshBasicMaterial({
+            color: 0x000000,
+            transparent: true,
+            opacity: 0.55            
+        });
+        var meshPlaca = new THREE.Mesh(geoPlaca, matPlaca);
+        meshPlaca.position.set(0, 2.0, 0); 
+        grupoTexto.add(meshPlaca);
+
+        grupoTexto.position.set(0, 42, -11);
+        scene.add(grupoTexto);
+    },
+    undefined,
+    function(error) {
+        console.error("Error al cargar la fuente:", error);
+    }
+);
+
+// RENDER
+function render() {
+    requestAnimationFrame(render);
+    controls.update();
+    renderer.render(scene, camera);
+}
+
+render();
+
+// RESIZE
+window.addEventListener('resize', function() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+
+</body>
+</html>
