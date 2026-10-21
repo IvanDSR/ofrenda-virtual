@@ -9,6 +9,7 @@
         body {
             margin: 0;
             overflow: hidden;
+            background-color: #110E1B;
         }
 
         canvas {
@@ -21,56 +22,58 @@
 
 <canvas id="myCanvas"></canvas>
 
+<!-- IMPORT MAP CON RUTAS APUNTANDO A THREE-JS/public/ -->
 <script type="importmap">
 {
     "imports": {
-        "three": "./js/three.module.js",
-        "three/OrbitControls": "./js/OrbitControls.js"
+        "three": "./THREE-JS/public/js/three.module.js",
+        "three/OrbitControls": "./THREE-JS/public/js/OrbitControls.js"
     }
 }
 </script>
 
 <script type="module">
-import { TextGeometry } from './js/TextGeometry.js';
-import { FontLoader } from './js/FontLoader.js';
+import { TextGeometry } from './THREE-JS/public/js/TextGeometry.js';
+import { FontLoader } from './THREE-JS/public/js/FontLoader.js';
 
 // LIBRERÍAS Y COMPONENTES
 import * as THREE from 'three';
 import { OrbitControls } from 'three/OrbitControls';
-import vasoAguaGroup from "./props/vaso_agua.js";
-import botellaGroup from "./props/botella.js";
-import papelGroup from "./props/papel_picado.js";
-import vasoGroup from "./props/vela.js";
-import tiraGroup from "./props/flor.js";
-import tiramorGroup from "./props/flor_morada.js";
-import floreroGroup from "./props/florero.js";
-import barroGroup from "./props/vaso_barro.js";
-import grupo from "./props/papel_abajo.js";
-import papelAbajo2Group from "./props/papel_abajo2.js";
-import fondoGroup from "./props/fondo.js";
-import grupoShot from "./props/caballito.js";
-import panGroup from "./props/pan_de_muerto.js";
-import salGroup from "./props/plato_sal.js";
-import frutasGroup from "./props/fruta.js";
-import tamalesGroup from "./props/tamales.js";
-import cervezaGroup from "./props/cerveza.js";
-import mascotaGroup from "./props/perrito.js";
-import marcoGroup from "./props/retrato1.js";
-import marco2Group from "./props/retrato2.js";
-import marco3Group from "./props/retrato3.js";
-import marco4Group from "./props/retrato4.js";
-import marco5Group from "./props/retrato5.js";
-import copalGroup from "./props/copal.js";
-import calaveraGroup from "./props/calavera.js";
-import grupoCruz from "./props/cruz.js";
+import vasoAguaGroup from "./THREE-JS/public/props/vaso_agua.js";
+import botellaGroup from "./THREE-JS/public/props/botella.js";
+import papelGroup from "./THREE-JS/public/props/papel_picado.js";
+import vasoGroup from "./THREE-JS/public/props/vela.js";
+import tiraGroup from "./THREE-JS/public/props/flor.js";
+import tiramorGroup from "./THREE-JS/public/props/flor_morada.js";
+import floreroGroup from "./THREE-JS/public/props/florero.js";
+import barroGroup from "./THREE-JS/public/props/vaso_barro.js";
+import grupo from "./THREE-JS/public/props/papel_abajo.js";
+import papelAbajo2Group from "./THREE-JS/public/props/papel_abajo2.js";
+import fondoGroup from "./THREE-JS/public/props/fondo.js";
+import grupoShot from "./THREE-JS/public/props/caballito.js";
+import panGroup from "./THREE-JS/public/props/pan_de_muerto.js";
+import salGroup from "./THREE-JS/public/props/plato_sal.js";
+import frutasGroup from "./THREE-JS/public/props/fruta.js";
+import tamalesGroup from "./THREE-JS/public/props/tamales.js";
+import cervezaGroup from "./THREE-JS/public/props/cerveza.js";
+import mascotaGroup from "./THREE-JS/public/props/perrito.js";
+import marcoGroup from "./THREE-JS/public/props/retrato1.js";
+import marco2Group from "./THREE-JS/public/props/retrato2.js";
+import marco3Group from "./THREE-JS/public/props/retrato3.js";
+import marco4Group from "./THREE-JS/public/props/retrato4.js";
+import marco5Group from "./THREE-JS/public/props/retrato5.js";
+import copalGroup from "./THREE-JS/public/props/copal.js";
+import calaveraGroup from "./THREE-JS/public/props/calavera.js";
+import grupoCruz from "./THREE-JS/public/props/cruz.js";
 
-// RENDERER ÚNICO (Configuración optimizada con sombras)
+// RENDERER ÚNICO
+const canvas = document.getElementById('myCanvas');
 var renderer = new THREE.WebGLRenderer({
-    canvas: document.getElementById('myCanvas'),
+    canvas: canvas,
     antialias: true
 });
 
-renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0x110E1B); 
 
@@ -101,11 +104,9 @@ controls.target.set(0, 14, 0);
 controls.update();
 
 // ILUMINACIÓN
-// 1. Luz ambiental cálida suave
 var light1 = new THREE.AmbientLight(0xFFD3A5, 0.6);
 scene.add(light1);
 
-// 2. Luz principal (SpotLight) frontal-superior hacia el centro de la ofrenda
 var spotLight1 = new THREE.SpotLight(
     0xFFFAF0, 120, 150, Math.PI / 3, 0.4
 );
@@ -118,7 +119,6 @@ spotLight1.shadow.mapSize.height = 1024;
 scene.add(spotLight1);
 scene.add(spotLight1.target);
 
-// 3. Luz lateral izquierda cálida (Naranja Cempasúchil)
 var spotLight2 = new THREE.SpotLight(
     0xFF7700, 90, 120, Math.PI / 3, 0.5
 );
@@ -129,7 +129,6 @@ spotLight2.castShadow = true;
 scene.add(spotLight2);
 scene.add(spotLight2.target);
 
-// 4. Luz lateral derecha (Morada / Mística)
 var spotLight3 = new THREE.SpotLight(
     0x9933FF, 90, 120, Math.PI / 3, 0.5
 );
@@ -139,7 +138,6 @@ spotLight3.target.position.set(5, 9, 0);
 scene.add(spotLight3);
 scene.add(spotLight3.target);
 
-
 // MATERIAL BLANCO SENSIBLE A LA LUZ
 var materialOfrenda = new THREE.MeshStandardMaterial({
     color: 0xFFFFFF,
@@ -147,245 +145,5 @@ var materialOfrenda = new THREE.MeshStandardMaterial({
     metalness: 0.1
 });
 
-
 // BASE DE OFRENDA DE TRES PISOS
-// PISO INFERIOR
-var geometriaPiso1 = new THREE.BoxGeometry(50, 6, 26);
-var piso1 = new THREE.Mesh(geometriaPiso1, materialOfrenda);
-piso1.position.set(0, 3, 0);
-scene.add(piso1);
-
-// PISO 2 (INTERMEDIO)
-var geometriaPiso2 = new THREE.BoxGeometry(40, 6, 18);
-var piso2 = new THREE.Mesh(geometriaPiso2, materialOfrenda);
-piso2.position.set(0, 9, -4);
-scene.add(piso2);
-
-// PISO 3 (SUPERIOR)
-var geometriaPiso3 = new THREE.BoxGeometry(30, 6, 10);
-var piso3 = new THREE.Mesh(geometriaPiso3, materialOfrenda);
-piso3.position.set(0, 15, -8);
-scene.add(piso3);
-
-//PROPS
-// FONDO Y DECORACIONES TRASERAS
-const FONDO = fondoGroup(0, 0, -15);
-FONDO.scale.set(1.7, 2, 1.7); 
-scene.add(FONDO);
-
-// TIRAS DE FLORES (Colgadas al fondo)
-const FLOR_IZQ = tiraGroup(-23, 16, -13);
-FLOR_IZQ.scale.set(1, 1.8, 1);
-scene.add(FLOR_IZQ);
-
-const FLOR_DER = tiraGroup(12, 16, -13);
-FLOR_DER.scale.set(1, 1.8, 1);
-scene.add(FLOR_DER);
-
-const FLORMOR_IZQ = tiramorGroup(-12, 16, -13);
-FLORMOR_IZQ.scale.set(1, 1.8, 1);
-scene.add(FLORMOR_IZQ);
-
-const FLORMOR_DER = tiramorGroup(23, 16, -13);
-FLORMOR_DER.scale.set(1, 1.8, 1);
-scene.add(FLORMOR_DER);
-
-// PAPEL PICADO 
-const PAPEL = papelGroup(0, 8.5, -2.8);
-PAPEL.scale.set(0.6, 0.4, 0.6);
-scene.add(PAPEL); 
-const PAPELAB = papelGroup(0, 7, 5.3);
-PAPELAB.scale.set(0.6, 0.2, 0.6);
-scene.add(PAPELAB); 
-
-// PAPEL PICADO ABAJO
-const PAPEL_DER = grupo(12.5, 3, 13.1);
-PAPEL_DER.scale.set(1, 0.9, 1);
-scene.add(PAPEL_DER);
-
-// PAPEL PICADO ABAJO naranja 
-const PAPEL_IZQ = papelAbajo2Group(-12.5, 3, 13.1);
-PAPEL_IZQ.scale.set(1, 0.9, 1);
-scene.add(PAPEL_IZQ);
-
-// PROPS EN PISO SUPERIOR
-const FLORERO = floreroGroup(-9, 18, -8);
-FLORERO.scale.set(1, 1, 1);
-scene.add(FLORERO);
-
-const VELA1 = vasoGroup(9, 18, -8);
-VELA1.scale.set(0.5, 0.5, 0.5);
-scene.add(VELA1);
-
-const RETRATO1 = marcoGroup(0, 18, -6);
-RETRATO1.scale.set(5, 5, 5);
-scene.add(RETRATO1);
-
-const CALAVERA = calaveraGroup(0, 18, -6);
-CALAVERA.scale.set(1, 1, 1);
-scene.add(CALAVERA);
-
-const CRUZ = grupoCruz(0, 16, -12);
-CRUZ.scale.set(4, 4, 3);
-scene.add(CRUZ);
-
-// PROPS EN PISO INTERMEDIO 
-const VELA2 = vasoGroup(-16, 12, 0);
-VELA2.scale.set(0.5, 0.5, 0.5);
-scene.add(VELA2);
-
-const MASCOTA = mascotaGroup(-5, 12, 3.5);
-MASCOTA.scale.set(0.6, 0.6, 0.6);
-scene.add(MASCOTA);
-
-const VELA3 = vasoGroup(16, 12, 0);
-VELA3.scale.set(0.5, 0.5, 0.5);
-scene.add(VELA3);
-
-const RETRATO2 = marco2Group(-9, 12, 0);
-RETRATO2.scale.set(4.5, 4.5, 4.5);
-scene.add(RETRATO2);
-
-const RETRATO3 = marco3Group(9, 12, 0);
-RETRATO3.scale.set(4.5, 4.5, 4.5);
-scene.add(RETRATO3);
-
-const COPAL = copalGroup(0, 12, 0);
-COPAL.scale.set(1.5, 1.5, 1.5);
-scene.add(COPAL);
-
-// PROPS EN PISO INFERIOR 
-const BOTELLA = botellaGroup(-22.5, 5, 4);
-BOTELLA.scale.set(0.2, 0.3, 0.2);
-scene.add(BOTELLA);
-
-const SHOT = grupoShot(-17, 6, 8);
-SHOT.scale.set(1, 1, 1);
-scene.add(SHOT);
-
-const BARRO = barroGroup(-21, 6, 10);
-BARRO.scale.set(0.1, 0.2, 0.1);
-scene.add(BARRO);
-
-const SAL = salGroup(-13.5, 6, 10);
-SAL.scale.set(0.2, 0.2, 0.2);
-scene.add(SAL);
-
-const VASO_AGUA = vasoAguaGroup(20, 6, 8);
-VASO_AGUA.scale.set(0.3, 0.3, 0.3);
-scene.add(VASO_AGUA);
-
-const PAN = panGroup(-12, 6, 10.5);
-PAN.scale.set(0.2, 0.2, 0.2);
-scene.add(PAN);
-
-const PAN2 = panGroup(13.5, 6, 10.5);
-PAN2.scale.set(0.2, 0.2, 0.2);
-scene.add(PAN2);
-
-const FRUTAS = frutasGroup(-7, 6, 10);
-FRUTAS.scale.set(1.5, 1.5, 1.5); 
-scene.add(FRUTAS);
-
-const TAMALES = tamalesGroup(8, 6, 10.5);
-TAMALES.scale.set(1.5, 1.5, 1.5); 
-scene.add(TAMALES);
-
-const CERVEZA = cervezaGroup(18, 6, 8);
-CERVEZA.scale.set(0.4, 0.5, 0.4);
-scene.add(CERVEZA);
-
-const RETRATO4 = marco4Group(-10, 6, 8);
-RETRATO4.scale.set(4, 4, 4);
-scene.add(RETRATO4);
-
-const RETRATO5 = marco5Group(10, 6, 8);
-RETRATO5.scale.set(4, 4, 4);
-scene.add(RETRATO5);
-
-// CARGA DE TEXTO 3D
-var loaderTexto = new FontLoader();
-
-loaderTexto.load(
-    "./font/helvetiker_bold.typeface.json",
-    function(font) {
-
-        var lineas = [
-            "QUE HOY TU RECUERDO",
-            "SE CONVIERTA EN EL ULTIMO ABRAZO",
-            "QUE NO TE PUDE DAR"
-        ];
-
-        var matTexto = new THREE.MeshStandardMaterial({
-            color: 0xFFD700,         
-            emissive: 0xFF8800,      
-            emissiveIntensity: 0.35,  
-            metalness: 0.2,
-            roughness: 0.3
-        });
-
-        var grupoTexto = new THREE.Group();
-        var tamañoLetra = 1.3;        
-        var altoEntreLineas = 2.0;
-
-        for (var i = 0; i < lineas.length; i++) {
-            var geoLinea = new TextGeometry(lineas[i], {
-                font: font,
-                size: tamañoLetra,
-                height: 0.5,         
-                curveSegments: 12,
-                bevelEnabled: true,
-                bevelThickness: 0.04,
-                bevelSize: 0.03,
-                bevelSegments: 3
-            });
-
-            geoLinea.computeBoundingBox();
-            var centroX = (geoLinea.boundingBox.max.x - geoLinea.boundingBox.min.x) / 2;
-            var meshLinea = new THREE.Mesh(geoLinea, matTexto);
-            meshLinea.position.set(-centroX, (lineas.length - 1 - i) * altoEntreLineas, 0.2);
-            meshLinea.castShadow = true;
-            grupoTexto.add(meshLinea);
-        }
-
-        // PLACA NEGRA 
-        var geoPlaca = new THREE.PlaneGeometry(36, 7.5);
-        var matPlaca = new THREE.MeshBasicMaterial({
-            color: 0x000000,
-            transparent: true,
-            opacity: 0.55            
-        });
-        var meshPlaca = new THREE.Mesh(geoPlaca, matPlaca);
-        meshPlaca.position.set(0, 2.0, 0); 
-        grupoTexto.add(meshPlaca);
-
-        grupoTexto.position.set(0, 42, -11);
-        scene.add(grupoTexto);
-    },
-    undefined,
-    function(error) {
-        console.error("Error al cargar la fuente para el texto:", error);
-    }
-);
-
-// RENDERIZADO
-function render() {
-    controls.update();
-    renderer.render(scene, camera);
-    requestAnimationFrame(render);
-}
-
-render();
-
-// AJUSTAR TAMAÑO DE VENTANA
-window.addEventListener('resize', function() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-});
-
-</script>
-
-</body>
-</html>
+var geometriaPiso1 = new THREE.BoxGeometry(50,
